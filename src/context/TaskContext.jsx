@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext, useMemo, useState, useCallback } from 'react'
 import { useTasks } from '../hooks/useTasks'
 import { useTimer } from '../hooks/useTimer'
 
@@ -6,10 +6,22 @@ const TaskContext = createContext(null)
 
 export function TaskProvider({ children }) {
   const { tasks, addTask, completeTask, deleteTask, updateTaskSessions } = useTasks()
+  const [sessionHistory, setSessionHistory] = useState([])
   
-  // Initialize timer with first task ID if available
-  const initialTaskId = tasks.length > 0 ? tasks[0].id : null
-  const timerState = useTimer(initialTaskId)
+  const addSession = useCallback((taskId, type = 'focus') => {
+    const session = {
+      id: Date.now(),
+      taskId,
+      type,
+      timestamp: new Date().toISOString(),
+    }
+    setSessionHistory((prev) => [...prev, session])
+    if (type === 'focus' && taskId) {
+      updateTaskSessions(taskId)
+    }
+  }, [updateTaskSessions])
+
+  const timerState = useTimer(null)
 
   const contextValue = useMemo(() => ({
     tasks,
@@ -17,8 +29,10 @@ export function TaskProvider({ children }) {
     completeTask,
     deleteTask,
     updateTaskSessions,
+    sessionHistory,
+    addSession,
     timerState,
-  }), [tasks, addTask, completeTask, deleteTask, updateTaskSessions, timerState])
+  }), [tasks, addTask, completeTask, deleteTask, updateTaskSessions, sessionHistory, addSession, timerState])
 
   return (
     <TaskContext.Provider value={contextValue}>

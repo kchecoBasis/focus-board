@@ -26,10 +26,11 @@ export function useTasks() {
     }
   }, [tasks])
 
-  const addTask = useCallback((title) => {
+  const addTask = useCallback((title, description = '') => {
     const newTask = {
       id: uuidv4(),
       title,
+      description,
       completedSessions: 0,
       completed: false,
       createdAt: new Date().toISOString(),

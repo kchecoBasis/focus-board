@@ -1,7 +1,40 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
 .env.*
 !.env.example
+
+# Vite build output
+dist/
+dist-ssr/
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+.playwright-mcp/
+.*-mcp/
+
+# OS & editor
 .DS_Store
+Thumbs.db
+*.local
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Loose screenshots (tracked ones live in docs/screenshots/)
+*.png
+*.jpg
+*.jpeg
+!docs/screenshots/
+!docs/screenshots/**
+
+# Cursor workspace cache
 .cursor/**/*
-.*-mcp/**/*
